@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: event_calendar
+        MYSQL_USER: my_user
+        MYSQL_PASSWORD: password
+#    build:
+#      context: ../mysql-db
+#      dockerfile: DockerfileMySQL
+    volumes:
+      - ../mysql-db/sql-scripts:/docker-entrypoint-initdb.d
+      - ./mysql-data:/var/lib/mysql
+
+  express-app:
+    container_name: express-container
+    build:
+      context: ../express-server
+      dockerfile: DockerfileExpress
+    ports:
+        - "3000:3000"
+    depends_on:
+      - mysql
+
+  console-app:
+    container_name: react-container
+    build:
+      context: ../react-app
+      dockerfile: DockerfileReact
+    ports:
+      - "3001:3001"
+    depends_on:
+      - express-app
+
+volumes:
+    mysql-data:
