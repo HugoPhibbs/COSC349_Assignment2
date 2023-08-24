@@ -10,7 +10,7 @@ const createHttpError = require("http-errors");
 dotenv.config();
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
+    host: "mysql", // not totally sure why we don't use mysql!
     user: "root",
     password: "password",
     database: "event_calendar",
