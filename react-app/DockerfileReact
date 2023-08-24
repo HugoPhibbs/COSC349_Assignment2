@@ -1,11 +1,19 @@
-FROM node:latest
+# Was getting compatability issues with alpine and bash, so use 16 (which uses debian under the hood)
+FROM node:16
 
 COPY . /app
 
 WORKDIR /app
 
+# Download script to wait for express
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+
+# Make the script executable
+RUN chmod +x wait-for-it.sh
+
 RUN npm config set strict-ssl false \
     && npm install \
     && npm install -g ts-node
 
-CMD ["npm", "run", "start"]
+# Can't use bash, so use sh. Alpine compatibility issues
+CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "start"]
