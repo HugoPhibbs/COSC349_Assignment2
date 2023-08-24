@@ -19,13 +19,11 @@ sudo apt-get update
 echo "Installing docker"
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# Print docker version
-sudo docker --version
+# Delete old sql data, this is so recent mysql setup is used, otherwise mysql will use old data
+sudo rm -rf /vagrant/mysql/mysql-data || 1
+
+# Stop currently running containers, want to start fresh, sometimes old configuration is carried over
+sudo docker compose -f /vagrant/provision/compose.yml down
 
 # Run docker containers from compose
 sudo docker compose -f /vagrant/provision/compose.yml up -d
-
-# Now setup the database
-
-
-# TODO source sql script
