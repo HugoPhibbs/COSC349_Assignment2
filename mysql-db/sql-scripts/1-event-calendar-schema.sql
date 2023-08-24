@@ -14,7 +14,6 @@ CREATE TABLE USER(
                      isAdmin BOOLEAN NOT NULL,
                      email VARCHAR(100) NOT NULL,
                      password VARCHAR(100) NOT NULL,
-                     salt VARCHAR(100) NOT NULL,
                      PRIMARY KEY (userId),
                      UNIQUE (email)
 );
