@@ -9,12 +9,11 @@ services:
         MYSQL_DATABASE: event_calendar
         MYSQL_USER: my_user
         MYSQL_PASSWORD: password
-#    build:
-#      context: ../mysql-db
-#      dockerfile: DockerfileMySQL
     volumes:
       - ../mysql-db/sql-scripts:/docker-entrypoint-initdb.d
-      - ./mysql-data:/var/lib/mysql
+      - ../mysql-db/mysql-data:/var/lib/mysql
+    networks:
+        - website-network
 
   express-app:
     container_name: express-container
@@ -22,19 +21,27 @@ services:
       context: ../express-server
       dockerfile: DockerfileExpress
     ports:
-        - "3000:3000"
+        - "3001:3001"
     depends_on:
       - mysql
+    networks:
+      - website-network
 
-  console-app:
+  react-app:
     container_name: react-container
     build:
       context: ../react-app
       dockerfile: DockerfileReact
     ports:
-      - "3001:3001"
+      - "3000:3000"
     depends_on:
       - express-app
+    networks:
+      - website-network
 
 volumes:
     mysql-data:
+
+networks:
+  website-network:
+    driver: bridge
