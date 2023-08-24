@@ -1,10 +1,19 @@
+# See comment in DockerfileReact as to why I'm using 16-alpine. Using it here too for consistency.
 FROM node:latest
 
-COPY . .
+COPY . /app
+
+WORKDIR /app
 
 RUN npm config set strict-ssl false \
     && npm install \
     && npm install -g ts-node
 
-CMD ["npm", "run", "start"]
+# Download script to wait for the db
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+
+# Make the script executable
+RUN chmod +x wait-for-it.sh
+
+CMD ["./wait-for-it.sh", "mysql:3306", "-t", "30", "--", "npm", "run", "start"]
 
