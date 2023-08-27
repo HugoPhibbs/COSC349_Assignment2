@@ -15,5 +15,5 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
 # Make the script executable
 RUN chmod +x wait-for-it.sh
 
-CMD ["./wait-for-it.sh", "mysql:3306", "-t", "30", "--", "npm", "run", "start"]
+CMD ["./wait-for-it.sh", "mysql:3306", "-t", "40", "--", "npm", "run", "start"]
 

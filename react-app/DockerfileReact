@@ -16,4 +16,4 @@ RUN npm config set strict-ssl false \
     && npm install -g ts-node
 
 # Can't use bash, so use sh. Alpine compatibility issues
-CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "start"]
+CMD ["./wait-for-it.sh", "express-app:3001", "-t", "45", "--","npm", "run", "start"]
