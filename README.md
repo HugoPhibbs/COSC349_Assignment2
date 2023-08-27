@@ -1,20 +1,36 @@
 # Event Calendar
+- This repo contains code to launch a website called "EventCalendar", which allows users to create and manage events associated with the University of Otago
 
-- Depoyed website: https://event-calendar-ka6m.onrender.com/
+## How to run
 
-- This is our repo for our event calendar project for INFO310!
-
-- Our ideas doc https://docs.google.com/document/d/10Ftv8xiNWzqwb7mDLE64FlYWde6kn45rvecJ2r8rUw4/edit
-
-- Spreadsheet for user requirements and sprint documentation: https://docs.google.com/spreadsheets/d/12fd1EtadMfiQKqN7ivZ8u01FkupfF1lQtW6gjt7gezk/edit?pli=1#gid=1687718450
-
-## Running the app
-- First build the app and install dependencies, use:
+### Running on a VM
+- If you wish to start the website on a new virtual machine
+- To start via vagrant, and create a VM with the website running on it, run the following command in the root directory of the repo
 ```shell
-npm run build
+vagrant up
 ```
 
-- To run the app, use:
+### Running locally with Docker
+- If you don't wish to boot up a new VM, you can run locally with docker:
+- To start via Docker, and create website containers locally on your machine. From the root level of the project, enter;
 ```shell
-npm run start
+cd ./provision
+chmod +x ./start_docker.sh
+./start_docker.sh
 ```
+
+### Viewing the website
+- In either case (VM or Docker route) to see the development website, visit http://localhost:3000/
+
+## System structure
+- The website is composed of 3 main parts - a MySQL database, an Express.js API, and a React front end.
+- A simplified system diagram is shown below, including the interaction between each component
+
+![](https://github.com/HugoPhibbs/COSC349_Assignment1_EventCalendar/blob/master/system.png)
+
+
+## Development
+- Both the React and Express app are written in TypeScript
+
+
+
