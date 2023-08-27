@@ -28,11 +28,11 @@ vagrant destroy
 ```shell
 docker compose -f ./provision/compose.yml up
 ```
-- After entering this command, pay attention to the logs; the website is ready when you see `Compiled sucessfully!...` from `react-container`
+- After entering this command, pay attention to the logs; the website is ready when you see `Compiled sucessfully!...` from `react-container`.
 
-- To stop the containers, and clear any container volumes (possibly necessary to allow recent code changes to take effect), enter:
+- To stop the containers, enter:
 ```shell
-docker compose -f ./provision/compose.yml down -v
+docker compose -f ./provision/compose.yml down
 ```
 
 ### Viewing the website
