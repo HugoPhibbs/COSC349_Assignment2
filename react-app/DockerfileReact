@@ -1,8 +1,10 @@
-# Was getting compatability issues with alpine and bash, so use 16 (which uses debian under the hood)
+# Was getting compatability issues with Alpine and BASH, so use 16 (which uses Debian under the hood)
 FROM node:16
 
+# Copy react app directory, NB: assumes that the context of this file is within react-app
 COPY . /app
 
+# Now set the work directory to the react app
 WORKDIR /app
 
 # Download script to wait for express
@@ -11,9 +13,10 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
 # Make the script executable
 RUN chmod +x wait-for-it.sh
 
+# Configure node, and install dependencies
 RUN npm config set strict-ssl false \
     && npm install \
     && npm install -g ts-node
 
-# Can't use bash, so use sh. Alpine compatibility issues
+# Use wait-for-it to make sure express is ready before actually starting
 CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "start"]
