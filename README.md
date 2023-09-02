@@ -38,6 +38,8 @@ docker compose build
 
 ![](https://github.com/HugoPhibbs/COSC349_Assignment1_EventCalendar/blob/master/system.png)
 
+- The containers interact with each other using HTTP requests via Docker's network capabilities.
+
 ## Development
 
 - Both the React and Express app are written in TypeScript
