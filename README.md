@@ -29,8 +29,7 @@ docker compose build
 
 - To view the development website, visit http://localhost:3000/
 
-## System structure
-
+## System Structure
 - The website is composed of 3 main parts - a MySQL database, an Express.js API, and a React front end.
 - The Express.js API contains all the routes necessary for the React app to indirectly interact with the DB - providing
   plumbing code where necessary.
@@ -40,9 +39,12 @@ docker compose build
 
 - The containers interact with each other using HTTP requests via Docker's network capabilities.
 
-## Development
+## Future Development
+- The application is deployed using a top level Docker compose file. This file creates and deploys the containers
+  from prebuilt and custom images.
+- The Node.js modules are written using Typescript.
 
-- Both the React and Express app are written in TypeScript
-
-
-
+### Project directories
+- `express-server` contains a Node.js project for the backend express.js API. Contains a Dockerfile to specify the Express container image.
+- `react-app` contains a Node.js project for the frontend React app. Contains a Dockerfile to specify the React container image.
+- `mysql-db` contains any configuration scripts of the MySQL container, along with any volumes for the MySQL DB
