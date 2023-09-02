@@ -8,7 +8,7 @@ INSERT INTO USER (firstName, lastName, isAdmin, email, password) VALUES
 INSERT INTO EVENT (title, location, startDate, endDate, description) VALUES
 ('Company Picnic', 'Central Park', '2023-08-03 11:00:00', '2023-08-03 17:00:00', 'Annual company picnic for all employees.'),
 ('Sales Conference', 'New York Marriott Marquis', '2023-08-06 09:00:00', '2023-08-07 11:00:00', 'Sales conference for all regional managers.'),
-('Product Launch', 'Jacob K. Javits Convention Center', '2023-09-05 05:00:00', '2024-09-05 07:00:00', 'Launch of new product line at the convention center.'),
+('Product Launch', 'Jacob K. Javits Convention Center', '2023-09-05 05:00:00', '2023-09-05 07:00:00', 'Launch of new product line at the convention center.'),
 ('Product Demo', 'The Auditorium', '2023-08-08 05:00:00', '2023-08-08 07:00:00', 'Demo for our new product line.'),
 ('Team Lunch', 'The Office', '2023-08-10 11:00:00', '2023-08-10 12:30:00', 'Employee lunch at the French Cafe'),
 ('Office Retreat', 'Lake Tekapo', '2023-08-24 05:00:00', '2023-08-28 07:00:00', 'Office retreat for all employees.');
