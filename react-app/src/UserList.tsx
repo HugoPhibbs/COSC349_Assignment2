@@ -86,7 +86,7 @@ function UserList() {
 
     useEffect(() => {
         axios
-            .get("/user", { headers: headers }) // Fetching user data
+            .get("http://localhost:3001/user", { headers: headers }) // Fetching user data
             .then((response) => {
                 setUsers(response.data); // Update users state with fetched data
             })
@@ -102,7 +102,7 @@ function UserList() {
                 for (const user of users) {
                     try {
                         const response = await axios.get(
-                            `/user/${user.userId}/events`, // Fetching events for each user
+                            `http://localhost:3001/user/${user.userId}/events`, // Fetching events for each user
                             { headers: headers }
                         );
                         const events = response.data;

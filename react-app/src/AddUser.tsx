@@ -118,7 +118,7 @@ function SignupForm() {
 
         try {
             // Send form data to the server for registration
-            const response = await axios.post("/register", formData);
+            const response = await axios.post("http://localhost:3001/register", formData);
             navigate("/user-list");
         } catch (error) {
             console.error(error);

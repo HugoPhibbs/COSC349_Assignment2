@@ -30,7 +30,7 @@ function EventCalendar() {
     }
 
     const headers = {
-        Authorization: authHeader(username, password),
+        Authorization: authHeader(username, password)
     };
 
     const navigate = useNavigate();
@@ -48,7 +48,7 @@ function EventCalendar() {
         try {
             // Retrieve recurring event suffixes
             const suffix_response = await axios.get(
-                "/event/retrieve-recurring-suffixes",
+                "http://localhost:3001/event/retrieve-recurring-suffixes",
                 {
                     headers: headers,
                 }
@@ -60,16 +60,18 @@ function EventCalendar() {
             recurringEventIdsRef.current = recurringEventIds;
 
             // Retrieve non-recurring events
-            const response = await axios.get("/event", {
+            const response = await axios.get("http://localhost:3001/event", {
                 headers: headers,
             });
+
+            console.log(response)
 
             let recurring_events = [];
 
             // Retrieve recurring events if any exist
             if (recurringEventIds.length > 0) {
                 const recurring_response = await axios.get(
-                    "/event/retrieve-recurring-events",
+                    "http://localhost:3001/event/retrieve-recurring-events",
                     {
                         params: {
                             recurringEventIds: recurringEventIds.join(","),
@@ -115,7 +117,7 @@ function EventCalendar() {
     // Fetch assigned events for the current user
     const getAssignedEvents = async (username: string) => {
         try {
-            const response = await axios.get(`/user/${userId}/events`, {
+            const response = await axios.get(`http://localhost:3001/user/${userId}/events`, {
                 headers: headers,
             });
             const assignedEvents = response.data.map((event: Event) => ({

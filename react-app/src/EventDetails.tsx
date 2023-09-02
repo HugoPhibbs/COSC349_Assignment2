@@ -94,7 +94,7 @@ function EventDetails() {
         const retrieveData = async () => {
             try {
                 const userIdResponse = await axios.get(
-                    `/event/${event.eventId}/assign`,
+                    `http://localhost:3001/event/${event.eventId}/assign`,
                     {
                         headers: {
                             Authorization: authHeader(username, password),
@@ -114,7 +114,7 @@ function EventDetails() {
 
     const deleteEvent = async () => {
         try {
-            await axios.delete(`/event/${event.eventId}`, {
+            await axios.delete(`http://localhost:3001/event/${event.eventId}`, {
                 headers: headers, // Send the authorization headers for deletion
             });
             navigate("/events"); // Navigate back to the events page after deletion

@@ -127,7 +127,7 @@ function EditUserForm() {
 
         try {
             await axios.patch(
-                `/user/${user.userId}`,
+                `http://localhost:3001/user/${user.userId}`,
                 {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
@@ -139,7 +139,7 @@ function EditUserForm() {
             if (formData.password.length > 0) {
                 console.log(`New password (react): ${formData.password}`);
                 await axios.patch(
-                    `/user/${user.userId}/password`,
+                    `http://localhost:3001/user/${user.userId}/password`,
                     {
                         newPassword: formData.password,
                     },

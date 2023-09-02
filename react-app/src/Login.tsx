@@ -136,7 +136,7 @@ const Login = () => {
             }
 
             // Actually logging in
-            const login = await axios.get("/login", {
+            const login = await axios.get("http://localhost:3001/login", {
                 headers: headers,
                 params: { "g-recaptcha-response": token },
             });

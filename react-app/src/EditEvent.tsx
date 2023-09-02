@@ -123,7 +123,7 @@ function EditEventForm() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("/user", {
+                const response = await axios.get("http://localhost:3001/user", {
                     headers: {
                         Authorization: authHeader(username, password),
                     },
@@ -142,7 +142,7 @@ function EditEventForm() {
         const retrieveData = async () => {
             try {
                 const userIdResponse = await axios.get(
-                    `/event/${event.eventId}/assign`,
+                    `http://localhost:3001/event/${event.eventId}/assign`,
                     {
                         headers: {
                             Authorization: authHeader(username, password),
@@ -189,20 +189,20 @@ function EditEventForm() {
 
         try {
             const response = await axios.patch(
-                `/event/${event.eventId}`,
+                `http://localhost:3001/event/${event.eventId}`,
                 formData,
                 { headers: headers }
             );
 
             try {
                 const response2 = await axios.delete(
-                    `/event/${event.eventId}/assign/${assignedUserId}`,
+                    `http://localhost:3001/event/${event.eventId}/assign/${assignedUserId}`,
                     { headers: headers }
                 );
             } catch (err) {}
 
             const response3 = await axios.post(
-                `/event/${event.eventId}/assign/${selectedUser}`,
+                `http://localhost:3001/event/${event.eventId}/assign/${selectedUser}`,
                 {},
                 { headers: headers }
             );
