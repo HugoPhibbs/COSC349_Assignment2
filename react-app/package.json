@@ -34,7 +34,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "dotenv react-scripts start",
+    "dev-start": "dotenv react-scripts start",
+    "prod-start": "serve -s build",
     "build": "dotenv react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

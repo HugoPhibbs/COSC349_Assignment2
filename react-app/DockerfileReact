@@ -1,4 +1,5 @@
 # Was getting compatability issues with Alpine and BASH, so use 16 (which uses Debian under the hood)
+# Also latest version of node has compatibility issues with webpack.
 FROM node:16
 
 # Copy react app directory, NB: assumes that the context of this file is within react-app
@@ -13,10 +14,11 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
 # Make the script executable
 RUN chmod +x wait-for-it.sh
 
-# Configure node, and install dependencies
+# Configure node, install dependencies, and build the app
 RUN npm config set strict-ssl false \
     && npm install \
-    && npm install -g ts-node
+    && npm run build \
+    && npm install -g serve 
 
 # Use wait-for-it to make sure express is ready before actually starting
-CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "start"]
+CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "prod-start"]
