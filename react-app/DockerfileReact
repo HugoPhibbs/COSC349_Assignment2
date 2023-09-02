@@ -18,7 +18,7 @@ RUN chmod +x wait-for-it.sh
 RUN npm config set strict-ssl false \
     && npm install \
     && npm run build \
-    && npm install -g serve \
+    && npm install -g serve 
 
 # Use wait-for-it to make sure express is ready before actually starting
 CMD ["./wait-for-it.sh", "express-app:3001", "-t", "35", "--","npm", "run", "prod-start"]
