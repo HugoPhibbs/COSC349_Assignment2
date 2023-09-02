@@ -17,6 +17,14 @@ docker compose up
 docker compose down -v
 ```
 
+## How to build
+
+- To rebuild container images after any source code changes, enter the command:
+
+```
+docker compose build
+```
+
 ### Viewing the website
 
 - To view the development website, visit http://localhost:3000/
