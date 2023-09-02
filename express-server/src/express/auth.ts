@@ -11,11 +11,22 @@ const authRouter = require("express").Router();
 
 const createHttpError = require("http-errors");
 
+/* 
+Set up reCaptcha for login
+
+I know these should be ignored by VCS and put into an .env file, but this makes it easier for the
+submitting and running the assignment - i.e. the webiste should work straight after the box after a git clone - 
+private anyways
+*/
+const RECAPTCHA_SITE_KEY = "6LfWCMglAAAAACnMy3Ma_Kp_9nJPHPZOQj2Y-8jC"
+const RECAPTCHA_SECRET = "6LfWCMglAAAAAFhoBy7r3laxTyQmeOr8k-rSLR1p"
+
+
 // Set up reCaptcha for login
 const ReCaptcha = require("express-recaptcha").RecaptchaV2;
 const reCaptcha = new ReCaptcha(
-    process.env.RECAPTCHA_SITE_KEY,
-    process.env.RECAPTCHA_SECRET
+    RECAPTCHA_SITE_KEY || process.env.RECAPTCHA_SITE_KEY,
+    RECAPTCHA_SECRET || process.env.RECAPTCHA_SECRET
 );
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
