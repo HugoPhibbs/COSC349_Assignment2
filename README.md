@@ -3,7 +3,9 @@
 - This repo contains code to launch a website called "EventCalendar", which allows users to create and manage events
   associated with the University of Otago
 
-## How to run
+## Building and Deploying
+
+### How to run
 
 - To start via Docker, and create website containers locally on your machine. From the root level of the project, enter:
 
@@ -17,7 +19,7 @@ docker compose up
 docker compose down -v
 ```
 
-## How to build
+### How to build
 
 - To rebuild container images after any source code changes, enter the command:
 
@@ -25,7 +27,7 @@ docker compose down -v
 docker compose build
 ```
 
-### Viewing the website
+## Viewing the website
 
 - To view the development website, visit http://localhost:3000/
 
@@ -47,4 +49,4 @@ docker compose build
 ### Project directories
 - `express-server` contains a Node.js project for the backend express.js API. Contains a Dockerfile to specify the Express container image.
 - `react-app` contains a Node.js project for the frontend React app. Contains a Dockerfile to specify the React container image.
-- `mysql-db` contains any configuration scripts of the MySQL container, along with any volumes for the MySQL DB
+- `mysql-db` contains any configuration scripts of the MySQL container, along with any volumes for the MySQL DB container.
