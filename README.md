@@ -10,7 +10,7 @@
 ```shell
 docker compose up
 ```
-- After entering this command, pay attention to the logs; the website is ready when you see `Compiled sucessfully!...` from `react-container`.
+- After entering this command, pay attention to the logs; the website is ready when you see `INFO  Accepting connections at http://localhost:3000` logged from `react-container`.
 
 - To stop the containers, enter:
 ```shell
