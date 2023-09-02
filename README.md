@@ -5,39 +5,21 @@
 
 ## How to run
 
-### Running on a VM
-
-- If you wish to start the website on a new virtual machine
-- To start via vagrant, and create a VM with the website running on it, run the following command in the root directory
-  of the project:
-
-```shell
-vagrant up
-```
-
-- To stop (destroy) the VM, enter:
-```shell
-vagrant destroy
-```
-
-### Running locally with Docker
-
-- If you don't wish to boot up a new VM, you can run locally with docker:
 - To start via Docker, and create website containers locally on your machine. From the root level of the project, enter:
 
 ```shell
-docker compose -f ./provision/compose.yml up
+docker compose up
 ```
 - After entering this command, pay attention to the logs; the website is ready when you see `Compiled sucessfully!...` from `react-container`.
 
 - To stop the containers, enter:
 ```shell
-docker compose -f ./provision/compose.yml down
+docker compose down -v
 ```
 
 ### Viewing the website
 
-- In either case (using VM or Docker) to see the development website, visit http://localhost:3000/
+- To view the development website, visit http://localhost:3000/
 
 ## System structure
 

@@ -1,13 +1,11 @@
-# See comment in DockerfileReact as to why I'm using 16-alpine. Using it here too for consistency.
+# Use latest node image, get latest node features that the react app does have.
 FROM node:latest
 
+# Copy express app directory, NB: assumes that the context of this file is within express-app
 COPY . /app
 
+# Now set the work directory to the express app
 WORKDIR /app
-
-RUN npm config set strict-ssl false \
-    && npm install \
-    && npm install -g ts-node
 
 # Download script to wait for the db
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
@@ -15,5 +13,11 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
 # Make the script executable
 RUN chmod +x wait-for-it.sh
 
-CMD ["./wait-for-it.sh", "mysql:3306", "-t", "40", "--", "npm", "run", "start"]
+# Configure node, and install dependencies
+RUN npm config set strict-ssl false \
+    && npm install \
+    && npm install -g ts-node
+
+# Use wait-for-it to make sure the db is ready before actually starting
+CMD ["./wait-for-it.sh", "mysql:3306", "-t", "30", "--", "npm", "run", "start"]
 
