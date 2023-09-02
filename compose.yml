@@ -10,7 +10,7 @@ services:
         MYSQL_USER: my_user
         MYSQL_PASSWORD: password
     volumes:
-      - ./mysql-db/sql-scripts:/docker-entrypoint-initdb.d
+      - ./mysql-db/sql-scripts:/docker-entrypoint-initdb.d # For SQL scripts to set up and fill the DB.
       - ./mysql-db/mysql-data:/var/lib/mysql
     networks:
         - website-network
