@@ -1,0 +1,22 @@
+service: event-calendar-express
+
+plugins:
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: prod
+  region: ap-southeast-2
+  profile: event-calendar
+  deploymentMethod: direct
+
+functions:
+  api:
+    handler: src/express/server.handler
+    events:
+      - http:
+          path: /
+          method: any
+      - http: 'ANY {proxy+}'
+
