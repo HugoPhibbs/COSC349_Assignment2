@@ -5,9 +5,28 @@
 
 ## Building and Deploying
 
-### How to run
+### Deploying to cloud platforms
 
-- To start via Docker, and create website containers locally on your machine. From the root level of the project, enter:
+#### Prerequisites:
+- TODO 
+
+#### Deploying everything at once:
+- To deploy _everything_ at once, run:
+```shell
+npm run deploy
+```
+
+#### Deploying the express app
+- To deploy just the express app using the Serverless framework, enter:
+```shell
+npm run deploy-express
+```
+
+### Deploying 
+
+### Running Locally
+
+- To start via Docker, and create website containers locally on your machine (i.e. create a local dev env). From the root level of the project, enter:
 
 ```shell
 docker compose up
