@@ -6,66 +6,57 @@
 ## Building and Deploying
 
 ### Prerequisites
+
 - Please make sure that you have valid AWS credentials specified in your .aws configuration file
 
 ### Deploying to cloud platforms
 
 #### Prerequisites:
+
 - Make sure you have npm, Terraform, and the AWS CLI
+- Add a `.env` file to the top level of the directory for your aws credentials, should look like:
+
+```
+AWS_ACCESS_KEY=XXXX
+AWS_SECRET_KEY=XXXX
+```
+
+- Deployment of this app requires a step by step deploy process.
 
 #### Deploying the express app
+
 - To deploy just the express app using the Serverless framework, enter:
+
 ```shell
 npm run deploy-express
 ```
 
-#### Deploying the Cron-Job
+#### Deploying the remaining services
 
-
-### Deploying 
-
-### Running Locally
-
-- To start via Docker, and create website containers locally on your machine (i.e. create a local dev env). From the root level of the project, enter:
-
+##### Pushing cron-job image
+- Before actually deploying the Cron-Job, if you have made any changes to the code of the cron job module, you will need
+  to push the new changes to the container registry. To do this run the commands (one after the other):
 ```shell
-docker compose up
-```
-- After entering this command, pay attention to the logs; the website is ready when you see `INFO  Accepting connections at http://localhost:3000` logged from `react-container`.
+aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 503722977011.dkr.ecr.ap-southeast-2.amazonaws.com
 
-- To stop the containers, enter:
+docker build -t cron-job -f ./cron-job/DockerfileCronjob .
+
+docker tag cron-job:latest 503722977011.dkr.ecr.ap-southeast-2.amazonaws.com/cron-job:latest 
+
+docker push 503722977011.dkr.ecr.ap-southeast-2.amazonaws.com/cron-job:latest 
+```
+
+#### Deploy with Terraform
+- To then deploy the EC2, RDS and Cron-job via Terraform, use:
 ```shell
-docker compose down -v
+terraform init
+
+terraform apply
 ```
-
-### How to build
-
-- To rebuild container images after any source code changes, enter the command:
-
-```
-docker compose build
-```
-
-## Viewing the website
-
-- To view the development website, visit http://localhost:3000/
-
-## System Structure
-- The website is composed of 3 main parts - a MySQL database, an Express.js API, and a React front end.
-- The Express.js API contains all the routes necessary for the React app to indirectly interact with the DB - providing
-  plumbing code where necessary.
-- A simplified system diagram is shown below, including the interaction between each component
-
-![](https://github.com/HugoPhibbs/COSC349_Assignment1_EventCalendar/blob/master/system.png)
-
-- The containers interact with each other using HTTP requests via Docker's network capabilities.
-
-## Future Development
-- The application is deployed using a top level Docker compose file. This file creates and deploys the containers
-  from prebuilt and custom images.
-- The Node.js modules are written using Typescript.
 
 ### Project directories
-- `express-server` contains a Node.js project for the backend express.js API. Contains a Dockerfile to specify the Express container image.
-- `react-app` contains a Node.js project for the frontend React app. Contains a Dockerfile to specify the React container image.
-- `mysql-db` contains any configuration scripts of the MySQL container, along with any volumes for the MySQL DB container.
+
+- `express-server` contains a Node.js project for the backend express.js API
+- `react-app` contains a Node.js project for the frontend React app
+- `mysql-db` contains any configuration scripts of the MySQL RDS DB
+- `cron-job` contains a micro project to run a cron-job within a container.
