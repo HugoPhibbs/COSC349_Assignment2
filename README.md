@@ -5,22 +5,22 @@
 
 ## Building and Deploying
 
+### Prerequisites
+- Please make sure that you have valid AWS credentials specified in your .aws configuration file
+
 ### Deploying to cloud platforms
 
 #### Prerequisites:
-- TODO 
-
-#### Deploying everything at once:
-- To deploy _everything_ at once, run:
-```shell
-npm run deploy
-```
+- Make sure you have npm, Terraform, and the AWS CLI
 
 #### Deploying the express app
 - To deploy just the express app using the Serverless framework, enter:
 ```shell
 npm run deploy-express
 ```
+
+#### Deploying the Cron-Job
+
 
 ### Deploying 
 
