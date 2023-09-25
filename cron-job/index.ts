@@ -1,9 +1,12 @@
 const cron = require('node-cron');
-import { Pool, RowDataPacket } from "mysql2/promise";
-const { pool, handleDbError } = require("../helpers") as {
-    pool: Pool;
-    handleDbError: any;
-};
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+    host: "mysql", // not totally sure why we don't use mysql!
+    user: "root",
+    password: "password",
+    database: "event_calendar",
+});
 
 async function deleteFinishedEvents() {
     try {
@@ -62,11 +65,11 @@ async function deleteFinishedEvents() {
     }
 }
 
-
 function startCronJob() {
-    //every min: '* * * * *'  <- use for demo
     //every hour '0 * * * *'
-    const task = cron.schedule('0 * * * *', async () => {
+    //every minute '* * * * *'
+    //every second '* * * * * *'
+    const task = cron.schedule('* * * * *', async () => {
         console.log("attempting...")
         try {
             const deletedCount = await deleteFinishedEvents();
@@ -79,6 +82,5 @@ function startCronJob() {
     task.start();
 }
 
-module.exports = {
-    startCronJob
-};
+console.log("Starting cron job...")
+startCronJob();

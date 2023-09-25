@@ -6,7 +6,6 @@ import { OkPacket, ResultSetHeader } from "mysql2";
 import PoolCluster from "mysql2/typings/mysql/lib/PoolCluster";
 const express = require("express");
 const eventRouter = express.Router();
-const eventCleaner = require("./event-cleaner");
 const recurringHandler = require("./repeat-event-handler");
 
 const { pool, handleApiError, checkUserPermissions } =
@@ -17,7 +16,6 @@ const { pool, handleApiError, checkUserPermissions } =
     };
 
 const createHttpError = require("http-errors");
-eventCleaner.startCronJob();
 
 eventRouter.get(`/retrieve-recurring-suffixes`, async (req, res) => {
     try {
