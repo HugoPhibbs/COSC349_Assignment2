@@ -1,0 +1,14 @@
+FROM node:latest
+
+COPY . /app
+
+WORKDIR /app
+
+# Configure node, and install dependencies
+RUN npm config set strict-ssl false \
+    && npm install \
+    && npm install -g ts-node
+
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "run", "start"]
