@@ -1,6 +1,6 @@
 provider "aws" {
   region = "ap-southeast-2"
-  profile = "ecs-deploy"
+  profile = "event-calendar"
 }
 
 resource "aws_ecr_repository" "cron-job" {
