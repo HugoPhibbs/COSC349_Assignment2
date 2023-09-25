@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "ts-node -T src/express/server.ts",
+    "start": "npx ts-node -T src/express/server.ts",
     "deploy": "npx serverless deploy"
   },
   "keywords": [],
