@@ -7,12 +7,12 @@ import dotenv from "dotenv";
 const createHttpError = require("http-errors");
 
 // Load env variables
-dotenv.config();
+dotenv.config({path: __dirname + "/../.env"});
 
 const pool = mysql.createPool({
     host: "mysql", // not totally sure why we don't use mysql!
-    user: "root",
-    password: "password",
+    user: process.env.AWS_ACCESS_KEY,
+    password: process.env.AWS_SECRET_ACCESS_KEY,
     database: "event_calendar",
 });
 
