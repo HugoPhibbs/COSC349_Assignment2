@@ -11,8 +11,8 @@ dotenv.config({path: __dirname + "/../.env"});
 
 const pool = mysql.createPool({
     host: "mysql", // not totally sure why we don't use mysql!
-    user: process.env.AWS_ACCESS_KEY,
-    password: process.env.AWS_SECRET_ACCESS_KEY,
+    user: "admin",
+    password: "password",
     database: "event_calendar",
 });
 
