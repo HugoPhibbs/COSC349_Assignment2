@@ -8,7 +8,7 @@
 ### Prerequisites:
 
 - Please make sure that you have valid AWS credentials specified in your .aws configuration file
-- Make sure you have npm, Terraform, the AWS cli and ansible
+- Make sure you have npm, Terraform, the AWS cli and puppet bolt
 - Add a `.env` file to the top level of the directory for your aws credentials, should look like:
 
 ```
