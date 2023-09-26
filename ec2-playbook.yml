@@ -1,0 +1,3 @@
+# Ansible playbook to provision my ec2 instance
+- name: Configure React EC2 instance
+  hosts:
