@@ -1,4 +1,3 @@
-import express from "express";
 const serverless = require("serverless-http"); // For AWS Lambda
 
 const dotenv = require("dotenv");
