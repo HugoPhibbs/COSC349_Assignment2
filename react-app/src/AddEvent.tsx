@@ -148,9 +148,6 @@ const initialRepeatData: RepeatFormData = {
     repeatEndDate: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
 };
 
-const dotenv = require("dotenv")
-dotenv.config()
-
 function CreateEventForm() {
     const [formData, setFormData] = useState<EventFormData>(initialFormData);
     const [repeatData, setRepeatData] =
@@ -183,7 +180,7 @@ function CreateEventForm() {
         // Fetch users from the server
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_HOST}/user`, {
+                const response = await axios.get(`/user`, {
                     headers: {
                         Authorization: authHeader(username, password),
                     },
@@ -235,7 +232,7 @@ function CreateEventForm() {
 
         try {
             // Create event
-            const response = await axios.post(`${process.env.REACT_APP_API_HOST}/event`, formData, {
+            const response = await axios.post(`/event`, formData, {
                 headers: headers,
             });
             const eventId = response.data.eventId;
@@ -243,7 +240,7 @@ function CreateEventForm() {
 
             // Assign event to user
             await axios.post(
-                `${process.env.REACT_APP_API_HOST}/event/${eventId}/assign/${userId}`,
+                `/event/${eventId}/assign/${userId}`,
                 {},
                 { headers: headers }
             );
@@ -257,7 +254,7 @@ function CreateEventForm() {
 
                 // Create repeating event
                 await axios.post(
-                    `${process.env.REACT_APP_API_HOST}/event/${eventId}/repeat`,
+                    `/event/${eventId}/repeat`,
                     repeatPayload,
                     { headers: headers }
                 );

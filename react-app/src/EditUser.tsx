@@ -83,9 +83,6 @@ interface UserFormData {
     confirmPassword: string;
 }
 
-const dotenv = require("dotenv")
-dotenv.config()
-
 function EditUserForm() {
     const location = useLocation();
     const user: User = location.state.user; // Get the user object from the location state
@@ -130,7 +127,7 @@ function EditUserForm() {
 
         try {
             await axios.patch(
-                `${process.env.REACT_APP_API_HOST}/user/${user.userId}`,
+                `/user/${user.userId}`,
                 {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
@@ -142,7 +139,7 @@ function EditUserForm() {
             if (formData.password.length > 0) {
                 console.log(`New password (react): ${formData.password}`);
                 await axios.patch(
-                    `${process.env.REACT_APP_API_HOST}/user/${user.userId}/password`,
+                    `/user/${user.userId}/password`,
                     {
                         newPassword: formData.password,
                     },

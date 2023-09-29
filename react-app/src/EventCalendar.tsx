@@ -8,9 +8,6 @@ import { Event, User } from "./types";
 
 const localizer = momentLocalizer(moment);
 
-const dotenv = require("dotenv")
-dotenv.config()
-
 function EventCalendar() {
     const [events, setEvents] = useState<Event[]>([]);
     const [showAssignedEvents, setShowAssignedEvents] = useState(false); // State for the toggle
@@ -51,7 +48,7 @@ function EventCalendar() {
         try {
             // Retrieve recurring event suffixes
             const suffix_response = await axios.get(
-                `${process.env.REACT_APP_API_HOST}/event/retrieve-recurring-suffixes`,
+                `/event/retrieve-recurring-suffixes`,
                 {
                     headers: headers,
                 }
@@ -65,7 +62,7 @@ function EventCalendar() {
             recurringEventIdsRef.current = recurringEventIds;
 
             // Retrieve non-recurring events
-            const response = await axios.get(`${process.env.REACT_APP_API_HOST}/event`, {
+            const response = await axios.get(`/event`, {
                 headers: headers,
             });
 
@@ -76,7 +73,7 @@ function EventCalendar() {
             // Retrieve recurring events if any exist
             if (recurringEventIds.length > 0) {
                 const recurring_response = await axios.get(
-                    `${process.env.REACT_APP_API_HOST}/event/retrieve-recurring-events`,
+                    `/event/retrieve-recurring-events`,
                     {
                         params: {
                             recurringEventIds: recurringEventIds.join(","),
@@ -122,7 +119,7 @@ function EventCalendar() {
     // Fetch assigned events for the current user
     const getAssignedEvents = async (username: string) => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_HOST}/user/${userId}/events`, {
+            const response = await axios.get(`/user/${userId}/events`, {
                 headers: headers,
             });
             const assignedEvents = response.data.map((event: Event) => ({

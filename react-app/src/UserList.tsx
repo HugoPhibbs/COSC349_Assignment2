@@ -86,7 +86,7 @@ function UserList() {
 
     useEffect(() => {
         axios
-            .get(`${process.env.REACT_APP_API_HOST}/user`, { headers: headers }) // Fetching user data
+            .get(`/user`, { headers: headers }) // Fetching user data
             .then((response) => {
                 setUsers(response.data); // Update users state with fetched data
             })
@@ -102,7 +102,7 @@ function UserList() {
                 for (const user of users) {
                     try {
                         const response = await axios.get(
-                            `${process.env.REACT_APP_API_HOST}/user/${user.userId}/events`, // Fetching events for each user
+                            `/user/${user.userId}/events`, // Fetching events for each user
                             { headers: headers }
                         );
                         const events = response.data;
@@ -128,7 +128,7 @@ function UserList() {
 
     const handleDeleteUser = (userId: number) => {
         axios
-            .delete(`${process.env.REACT_APP_API_HOST}/user/${userId}`, {
+            .delete(`/user/${userId}`, {
                 headers: headers,
             }) // Delete user by user ID
             .then(() => {

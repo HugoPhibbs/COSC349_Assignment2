@@ -94,9 +94,6 @@ interface EventFormData {
     description: string;
 }
 
-const dotenv = require("dotenv")
-dotenv.config()
-
 function EditEventForm() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -126,7 +123,7 @@ function EditEventForm() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_HOST}/user`, {
+                const response = await axios.get(`/user`, {
                     headers: {
                         Authorization: authHeader(username, password),
                     },
@@ -145,7 +142,7 @@ function EditEventForm() {
         const retrieveData = async () => {
             try {
                 const userIdResponse = await axios.get(
-                    `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign`,
+                    `/event/${event.eventId}/assign`,
                     {
                         headers: {
                             Authorization: authHeader(username, password),
@@ -192,20 +189,20 @@ function EditEventForm() {
 
         try {
             const response = await axios.patch(
-                `${process.env.REACT_APP_API_HOST}/event/${event.eventId}`,
+                `/event/${event.eventId}`,
                 formData,
                 { headers: headers }
             );
 
             try {
                 const response2 = await axios.delete(
-                    `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign/${assignedUserId}`,
+                    `/event/${event.eventId}/assign/${assignedUserId}`,
                     { headers: headers }
                 );
             } catch (err) {}
 
             const response3 = await axios.post(
-                `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign/${selectedUser}`,
+                `/event/${event.eventId}/assign/${selectedUser}`,
                 {},
                 { headers: headers }
             );

@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import { User } from "./types";
 
-const dotenv = require("dotenv");
-dotenv.config();
-
 // Wrapper for the entire page
 const Wrapper = styled.div`
     // Styling for the wrapper
@@ -100,6 +97,7 @@ const Login = () => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
+            ...formData,
             [event.target.name]: event.target.value,
         });
     };
@@ -125,23 +123,23 @@ const Login = () => {
         event.preventDefault();
 
         try {
-            // Using reCaptcha
-            // @ts-ignore
-            const token = recaptchaRef.current.getValue();
-            // @ts-ignore
-            recaptchaRef.current.reset();
+            // // Using reCaptcha
+            // // @ts-ignore
+            // const token = recaptchaRef.current.getValue();
+            // // @ts-ignore
+            // recaptchaRef.current.reset();
 
-            if (!token) {
-                setErrorMessage("Please complete the reCaptcha"); // Set error message
-                return;
-            }
+            // if (!token) {
+            //     setErrorMessage("Please complete the reCaptcha"); // Set error message
+            //     return;
+            // }
 
-            console.log(process.env.REACT_APP_API_HOST)
+            // console.log(process.env.)
 
             // Actually logging in
-            const login = await axios.get(`${process.env.REACT_APP_API_HOST}/login`, {
+            const login = await axios.get(`/login`, {
                 headers: headers,
-                params: { "g-recaptcha-response": token },
+                // params: { "g-recaptcha-response": token },
             });
             const isAdmin = login.data.isAdmin;
             const userId = login.data.userId;
@@ -196,11 +194,11 @@ const Login = () => {
                     />
                 </Label>
                 <ErrorMessage>{errorMessage}</ErrorMessage>
-                <ReCAPTCHA
-                    className="recaptcha"
-                    ref={recaptchaRef}
-                    sitekey={reCaptchaSiteKey}
-                />
+                {/*<ReCAPTCHA*/}
+                {/*    className="recaptcha"*/}
+                {/*    ref={recaptchaRef}*/}
+                {/*    sitekey={reCaptchaSiteKey}*/}
+                {/*/>*/}
                 <Button type="submit">LOG IN</Button>
             </Form>
         </Wrapper>
