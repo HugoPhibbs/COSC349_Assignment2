@@ -3,6 +3,8 @@ service: event-calendar-express
 plugins:
   - serverless-plugin-typescript
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -10,6 +12,15 @@ provider:
   region: ap-southeast-2
   profile: event-calendar
   deploymentMethod: direct
+  environment:
+    DB_HOST: ${env:DB_HOST}
+  vpc:
+    securityGroupIds:
+      - sg-02f68b564e4301b43
+    subnetIds:  # IDs of ap-southeast subnets
+      - subnet-090fbbedb6683646f
+      - subnet-089a15d385e74250c
+      - subnet-02878b87a7149c480
 
 functions:
   api:
