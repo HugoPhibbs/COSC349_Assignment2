@@ -20,7 +20,12 @@ const bcrypt = require("bcryptjs");
 
 // Adding CORS(Cross Origin Resource Sharing) express
 const cors = require("cors");
-app.use(cors())
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    })
+);
 
 // For parsing JSON bodies
 app.use(bodyParser.json());
