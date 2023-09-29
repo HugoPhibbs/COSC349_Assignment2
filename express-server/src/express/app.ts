@@ -14,17 +14,17 @@ const authRouter = require("./auth").authRouter; // For auth routes
 const app = express();
 
 // Add react app to public
-app.use(express.static("../react-app/build"));
+// app.use(express.static("../react-app/build"));
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // Adding CORS(Cross Origin Resource Sharing) express
-const cors = require("cors");
-app.use(
-    cors({
-        origin: "http://localhost:3000",
-    })
-);
+// const cors = require("cors");
+// app.use(
+//     cors({
+//         origin: "http://localhost:3000",
+//     })
+// );
 
 // For parsing JSON bodies
 app.use(bodyParser.json());

@@ -30,58 +30,57 @@ const reCaptcha = new ReCaptcha(
 );
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 authRouter.use(
     basicAuth({
         authorizer: authorize,
         authorizeAsync: true,
         unauthorizedResponse: "Authentication failed",
-    }),
-    assignRequestRole
-);
+    })
+)
 
-/**
- * Assigns a role to a request, used for role auth
- *
- * @param req
- * @param res
- * @param next
- */
-async function assignRequestRole(req, res, next) {
-    // @ts-ignore
-    const role = await getUserRole(req.auth.user, req.auth.password);
-    if (role === null) {
-        res.status(500).send("Internal server error");
-    }
-    // @ts-ignore
-    req.role = role;
-    next();
-}
+// /**
+//  * Assigns a role to a request, used for role auth
+//  *
+//  * @param req
+//  * @param res
+//  * @param next
+//  */
+// async function assignRequestRole(req, res, next) {
+//     // @ts-ignore
+//     const role = await getUserRole(req.auth.user, req.auth.password);
+//     if (role === null) {
+//         res.status(500).send("Internal server error");
+//     }
+//     // @ts-ignore
+//     req.role = role;
+//     next();
+// }
 
-/**
- * Gets the role for a user.
- *
- * Used for role based authentication/authorization. Since this comes after basic auth, passwords are not compared.
- *
- * @param email string for the role of a user
- * @return string for the role of a user
- */
-async function getUserRole(email: string): Promise<string> {
-    try {
-        const [results] = await pool.query<User[]>(
-            `SELECT *
-             FROM USER
-             WHERE email = ?`,
-            [email]
-        );
-        assert(results.length == 1, "There should be exactly one user found");
-        return Boolean(results[0].isAdmin) ? "admin" : "user";
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
+// /**
+//  * Gets the role for a user.
+//  *
+//  * Used for role based authentication/authorization. Since this comes after basic auth, passwords are not compared.
+//  *
+//  * @param email string for the role of a user
+//  * @return string for the role of a user
+//  */
+// async function getUserRole(email: string): Promise<string> {
+//     try {
+//         const [results] = await pool.query<User[]>(
+//             `SELECT *
+//              FROM USER
+//              WHERE email = ?`,
+//             [email]
+//         );
+//         assert(results.length == 1, "There should be exactly one user found");
+//         return Boolean(results[0].isAdmin) ? "admin" : "user";
+//     } catch (err) {
+//         console.error(err);
+//         return null;
+//     }
+// }
 
 /**
  * Basic Auth authorizing function a user using a username and password combination
@@ -115,18 +114,19 @@ async function authorize(
 }
 
 // Adding in Role based auth
-acl.config(
-    {
-        roleSearchPath: "role",
-        baseUrl: "/",
-    },
-    {
-        status: "Access Denied",
-        message: "You do not have permission to access this resource",
-    }
-);
+// acl.config(
+//     {
+//         roleSearchPath: "role",
+//         baseUrl: "/",
+//     },
+//     {
+//         status: "Access Denied",
+//         message: "You do not have permission to access this resource",
+//     }
+// );
 
-authRouter.use(acl.authorize);
+// authRouter.use(acl.authorize);
+
 
 // Adding in login route
 
@@ -172,7 +172,8 @@ authRouter.get(
         }
         return res.status(200).json({
             // @ts-ignore
-            isAdmin: req.role === "admin",
+            // isAdmin: req.role === "admin",
+            isAdmin: true, // TODO remove this
             userId: results[0].userId,
         });
     }
