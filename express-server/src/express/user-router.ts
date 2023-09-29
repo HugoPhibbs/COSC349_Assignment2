@@ -15,23 +15,16 @@ const express = require("express");
 const userRouter = express.Router();
 
 // Password encryption
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
-// For file uploads
-const multer = require("multer");
+// // For only accepting jpg uploads
+// const fileFilter = function (req, file, cb) {
+//     if (file.mimetype !== "image/jpeg") {
+//         return cb(new Error("Only JPEG files are allowed"));
+//     }
+//     cb(null, true);
+// };
 
-// For only accepting jpg uploads
-const fileFilter = function (req, file, cb) {
-    if (file.mimetype !== "image/jpeg") {
-        return cb(new Error("Only JPEG files are allowed"));
-    }
-    cb(null, true);
-};
-
-const upload = multer({
-    dest: "photos/",
-    fileFilter: fileFilter,
-});
 
 /**
  * Get all users
@@ -125,9 +118,9 @@ userRouter.patch("/:userId", async (req, res) => {
     try {
         const { firstName, lastName, email } = req.body;
 
-        console.log(`${req.role} ${req.params.userId} ${req.auth.user}`);
+        // console.log(`${req.role} ${req.params.userId} ${req.auth.user}`);
 
-        await checkUserPermissions(req.role, req.params.userId, req.auth.user);
+        //await checkUserPermissions(req.role, req.params.userId, req.auth.user);
 
         const result = await pool.query<ResultSetHeader>(
             "UPDATE USER SET firstName = ?, lastName = ?, email = ? WHERE userId = ?",
@@ -180,7 +173,7 @@ userRouter.delete("/:userId", async (req, res) => {
 userRouter.get("/:userId/events", async (req, res) => {
     const userId = req.params.userId;
 
-    await checkUserPermissions(req.role, userId, req.auth.user);
+    // await checkUserPermissions(req.role, userId, req.auth.user);
 
     const afterDateTime = req.query.afterDateTime as string;
 
@@ -218,7 +211,7 @@ userRouter.get("/:userId/events", async (req, res) => {
  */
 userRouter.patch("/:userId/password", async (req, res) => {
     try {
-        await checkUserPermissions(req.role, req.params.userId, req.auth.user);
+        // await checkUserPermissions(req.role, req.params.userId, req.auth.user);
 
         console.log(`new Password ${req.body.newPassword}`);
         const passwordHashSalt = bcrypt.hashSync(req.body.newPassword, 10);
@@ -259,41 +252,6 @@ userRouter.patch("/:userId/password", async (req, res) => {
         );
     }
 });
-
-/**
- * Returns a photo for a particular user.
- */
-userRouter.get("/:userId/photo", async (req, res) => {
-    await checkUserPermissions(req.role, req.params.userId, req.auth.user);
-    const photoDir = userPhotoDir(req.params.userId);
-
-    // Check if file exists
-    if (!fs.existsSync(photoDir)) {
-        return res.status(404).send("Photo not found");
-    }
-    return res.sendFile(`${process.cwd()}${path.sep}${photoDir}`); // Requires absolute path
-});
-
-/**
- * Uploads a photo for a particular user, covers cases of updating and creating
- */
-userRouter.post("/:userId/photo", upload.single("photo"), async (req, res) => {
-    await checkUserPermissions(req.role, req.params.userId, req.auth.user);
-
-    fs.renameSync(req.file.path, userPhotoDir(req.params.userId));
-
-    res.send("File uploaded successfully");
-});
-
-/**
- * Returns the directory for a saved user's photo, relative to the current file.
- *
- * @param userId string
- * @return string
- */
-function userPhotoDir(userId: string) {
-    return `photos\\user_${userId}.jpg`;
-}
 
 export {};
 
