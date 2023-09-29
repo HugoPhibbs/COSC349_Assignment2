@@ -3,14 +3,24 @@ const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 
 // Load env variables
-dotenv.config({path: __dirname + "/../.env"});
+dotenv.config();
 
 const pool = mysql.createPool({
-    host: "mysql", // not totally sure why we don't use mysql! TODO Change
+    host: process.env.DB_HOST, // not totally sure why we don't use mysql! TODO Change
     user: "admin",
     password: "password",
     database: "event_calendar",
 });
+
+pool.getConnection((err, connection) => {
+    if (err) {
+        console.error("An error occurred while connecting to the database", err);
+        throw err;
+    }
+
+    console.log("Connected to the database");
+    connection.release();
+})
 
 async function deleteFinishedEvents() {
     try {
@@ -87,4 +97,4 @@ function startCronJob() {
 }
 
 console.log("Starting cron job...")
-startCronJob();
+startCronJob()
