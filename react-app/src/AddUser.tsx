@@ -90,6 +90,9 @@ const initialFormData: UserFormData = {
     confirmPassword: "",
 };
 
+const dotenv = require("dotenv")
+dotenv.config()
+
 function SignupForm() {
     // State for form data
     const [formData, setFormData] = useState<UserFormData>(initialFormData);
@@ -118,7 +121,7 @@ function SignupForm() {
 
         try {
             // Send form data to the server for registration
-            const response = await axios.post("http://localhost:3001/register", formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_HOST}/register`, formData);
             navigate("/user-list");
         } catch (error) {
             console.error(error);

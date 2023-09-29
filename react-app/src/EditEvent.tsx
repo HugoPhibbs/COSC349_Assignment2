@@ -94,6 +94,9 @@ interface EventFormData {
     description: string;
 }
 
+const dotenv = require("dotenv")
+dotenv.config()
+
 function EditEventForm() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -123,7 +126,7 @@ function EditEventForm() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/user", {
+                const response = await axios.get(`${process.env.REACT_APP_API_HOST}/user`, {
                     headers: {
                         Authorization: authHeader(username, password),
                     },
@@ -142,7 +145,7 @@ function EditEventForm() {
         const retrieveData = async () => {
             try {
                 const userIdResponse = await axios.get(
-                    `http://localhost:3001/event/${event.eventId}/assign`,
+                    `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign`,
                     {
                         headers: {
                             Authorization: authHeader(username, password),
@@ -189,20 +192,20 @@ function EditEventForm() {
 
         try {
             const response = await axios.patch(
-                `http://localhost:3001/event/${event.eventId}`,
+                `${process.env.REACT_APP_API_HOST}/event/${event.eventId}`,
                 formData,
                 { headers: headers }
             );
 
             try {
                 const response2 = await axios.delete(
-                    `http://localhost:3001/event/${event.eventId}/assign/${assignedUserId}`,
+                    `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign/${assignedUserId}`,
                     { headers: headers }
                 );
             } catch (err) {}
 
             const response3 = await axios.post(
-                `http://localhost:3001/event/${event.eventId}/assign/${selectedUser}`,
+                `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign/${selectedUser}`,
                 {},
                 { headers: headers }
             );

@@ -124,6 +124,9 @@ const SignOutButton = styled.button`
     }
 `;
 
+const dotenv = require("dotenv")
+dotenv.config()
+
 const App: React.FC = () => {
     // Check if user is logged in and if the user is an admin
     const userData = sessionStorage.getItem("userData");

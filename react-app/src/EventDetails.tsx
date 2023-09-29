@@ -60,6 +60,9 @@ const Button = styled.button`
     }
 `;
 
+const dotenv = require("dotenv")
+dotenv.config()
+
 function EventDetails() {
     const location = useLocation();
     const event: Event = location.state.event; // Get the event object from the location state
@@ -94,7 +97,7 @@ function EventDetails() {
         const retrieveData = async () => {
             try {
                 const userIdResponse = await axios.get(
-                    `http://localhost:3001/event/${event.eventId}/assign`,
+                    `${process.env.REACT_APP_API_HOST}/event/${event.eventId}/assign`,
                     {
                         headers: {
                             Authorization: authHeader(username, password),
@@ -114,7 +117,7 @@ function EventDetails() {
 
     const deleteEvent = async () => {
         try {
-            await axios.delete(`http://localhost:3001/event/${event.eventId}`, {
+            await axios.delete(`${process.env.REACT_APP_API_HOST}/event/${event.eventId}`, {
                 headers: headers, // Send the authorization headers for deletion
             });
             navigate("/events"); // Navigate back to the events page after deletion

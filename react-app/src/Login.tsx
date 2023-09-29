@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import ReCAPTCHA from "react-google-recaptcha";
 import { User } from "./types";
+
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -135,8 +136,10 @@ const Login = () => {
                 return;
             }
 
+            console.log(process.env.REACT_APP_API_HOST)
+
             // Actually logging in
-            const login = await axios.get("http://localhost:3001/login", {
+            const login = await axios.get(`${process.env.REACT_APP_API_HOST}/login`, {
                 headers: headers,
                 params: { "g-recaptcha-response": token },
             });
