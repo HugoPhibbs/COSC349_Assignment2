@@ -1,3 +1,5 @@
+USE event_calendar;
+
 -- Inserting data into the USER table
 INSERT INTO USER (firstName, lastName, isAdmin, email, password) VALUES
 ('John', 'Doe', true, 'johndoe@email.com', '$2b$10$wDwdOvEEk6tnTx6JSZ6UlOapQ4CPXeDLXkeHZ69UYAKlwyCh9uCce'), # password123

@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS event_calendar;
+CREATE DATABASE event_calendar;
 USE event_calendar;
 
 DROP TABLE IF EXISTS RECURRING_EVENT_SUFFIX;
