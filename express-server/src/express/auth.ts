@@ -137,19 +137,19 @@ async function authorize(
  */
 authRouter.get(
     "/login",
-    reCaptcha.middleware.verify,
-    (req, res, next) => {
-        if (
-            req.query["g-recaptcha-response"] ===
-            process.env.RECAPTCHA_TEST_TOKEN
-        ) {
-            return next();
-        }
-        if (!req.recaptcha || req.recaptcha.error) {
-            return res.status(422).send("Failed reCAPTCHA");
-        }
-        return next();
-    },
+    // reCaptcha.middleware.verify,
+    // (req, res, next) => {
+    //     if (
+    //         req.query["g-recaptcha-response"] ===
+    //         process.env.RECAPTCHA_TEST_TOKEN
+    //     ) {
+    //         return next();
+    //     }
+    //     if (!req.recaptcha || req.recaptcha.error) {
+    //         return res.status(422).send("Failed reCAPTCHA");
+    //     }
+    //     return next();
+    // },
     async (req, res) => {
         // Get id of user
         let results;
@@ -170,6 +170,9 @@ authRouter.get(
                 "An error occurred while getting a user ID"
             );
         }
+
+        res.header("Access-Control-Allow-Origin", "*");
+
         return res.status(200).json({
             // @ts-ignore
             // isAdmin: req.role === "admin",
