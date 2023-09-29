@@ -1,7 +1,7 @@
 import express from "express";
-import { Pool } from "mysql2/promise";
+import {Pool} from "mysql2/promise";
 import multer from "multer"; //for Form inputs
-import { OkPacket } from "mysql2";
+import {OkPacket} from "mysql2";
 import bodyParser from "body-parser";
 const pool: Pool = require("../helpers").pool; // For SQL
 
@@ -19,12 +19,8 @@ const app = express();
 const bcrypt = require("bcryptjs");
 
 // Adding CORS(Cross Origin Resource Sharing) express
-// const cors = require("cors");
-// app.use(
-//     cors({
-//         origin: "http://localhost:3000",
-//     })
-// );
+const cors = require("cors");
+app.use(cors())
 
 // For parsing JSON bodies
 app.use(bodyParser.json());
@@ -46,7 +42,7 @@ app.post("/register", async (req, res) => {
         const hashSaltPassword = bcrypt.hashSync(req.body.password, 10);
         await pool.query<OkPacket>(
             `INSERT INTO USER (firstName, lastName, isAdmin, email, password)
-                  VALUES (?, ?, ?, ?, ?)`,
+             VALUES (?, ?, ?, ?, ?)`,
             [
                 req.body.firstName,
                 req.body.lastName,
