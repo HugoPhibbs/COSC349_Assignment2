@@ -3,18 +3,37 @@
 - This repo contains code to launch a website called "EventCalendar", which allows users to create and manage events
   associated with the University of Otago
 
+## System Architecture
+
+- The app is composed of several AWS services. A simplified diagram of the system is shown below:
+
+<img src="architecture.png" alt="Image Description" height = 400px style="transform: scale(1);">
+
+### App parts
+
+- An EC2 instance (`React EC2` as above) serves the website files to a web browser using React.
+- The `React EC2` is served by an AWS Lambda instance (`Lambda API` as above). This handles API requests from the React wesbsite, and then
+  completes CRUD operations with the production database. This is written in TypeScript using Express.js.
+- The production database (`Production DB` as above) is implemented with an AWS RDS MySQL instance. 
+- A further EC2 instance is used to delete old repeated events from the production database.
+
 ## Deploying to cloud platforms
+
+### Deployment overview
+
+- The app is deployed to AWS using a combination of Terraform and the Serverless framework.
+- Terraform is used to deploy the RDS DB, and both the EC2 instances. The Lambda function is deployed using the
+  Serverless framework
+- Once the services are deployed, manually provisioning is required to make them production ready.
 
 ### Prerequisites:
 
-- Please make sure that you have valid AWS credentials specified in your .aws configuration file
-- Make sure you have npm, Terraform, the AWS cli and puppet bolt
-- Add a `.env` file to the top level of the directory for your aws credentials, should look like:
+- Deployment of this app requires a step by step deploy process
+- Please make sure that you have valid AWS credentials specified in your .aws configuration file. These should be under
+  the profile `event-calendar`
+- Make sure you have npm, Terraform and the AWS CLI installed
 
-```
-AWS_ACCESS_KEY=XXXX
-AWS_SECRET_KEY=XXXX
-```
+#### Configuring the SSH key for EC2 instances
 
 - Assuming that you have the provided SSH key (the .pem file) and that its in the top level project directory. You will
   need to make it visible to your local ssh client
@@ -23,16 +42,17 @@ AWS_SECRET_KEY=XXXX
 ```shell
 chmod 400 event-calendar.pem
 ```
+
 - On Windows systems (make sure to substitute `<USERNAME>` for your Windows username)
+
 ```shell
 icacls event-calendar.pem /inheritance:r /grant:r "<USERNAME>:R"
 ```
 
-- Deployment of this app requires a step by step deploy process.
-
 ### Deploy with Terraform
 
-- To then deploy the React and Cron-Job EC2 instances, along with the RDS DB, run:
+- Now you can deploy the first lot of services using Terraform
+- To deploy the React and Cron-Job EC2 instances, along with the RDS DB, run:
 
 ```shell
 terraform init --upgrade
@@ -40,21 +60,52 @@ terraform init --upgrade
 terraform apply 
 ```
 
-#### Notes:
-- Make sure that the value of `DB_HOST` specified in the `.env` files in both the `cron-job` and `express-server` directories is up-to-date with what is printed when you run `terraform apply`
+#### Using the output of `terraform apply`:
 
+- You will see that the host url of the RDS DB is printed out by Terraform. Set this to the value of `DB_HOST` in
+  the `.env` files within the `cron-job` and `express-server` directories
 
-### Deploying the express app
+```dotenv
+# In cron-jon/.env and /express-server/.env
+DB_HOST=XXXXX
+```
+
+- The Terraform deploy creates a Lambda security group necessary for the Express Lambda function. This should be
+  referenced `serverless.yml`, in the configuration file of the Lambda function. The id of
+  this security group is printed out after entering `terraform apply`. Copy this into the `provider` section
+  of `express-server/serverless.yml` like so
+
+```yaml
+# express-server/serverless.yml
+# ...Rest of file above
+
+provider:
+  # Other details...
+  vpc:
+    securityGroupIds:
+      - <Lambda security group id>
+
+# Rest of file below...
+```
+
+### Deploying the Lambda Express app
 
 - Note: This must be done *after* deploying with Terraform
 
-- To deploy just the express app using the Serverless framework, enter:
+- To deploy the Express API using the Serverless framework, enter:
 
 ```shell
 cd express-server
 npm run install-deploy
 ```
 
+- Once you have deployed the Lambda, copy the API gateway address of the function to a new `.env` file
+  at `react-app/.env` like so:
+
+```dotenv
+# In react-app/.env
+API_HOST="XXXX"
+```
 
 ### Provisioning
 
@@ -63,7 +114,17 @@ npm run install-deploy
 
 #### Provisioning the React instance:
 
-- First copy over contents from the project directory to the ec2 instance with:
+- First, build the React app locally, this can be extraordinarily slow a small server, so do it locally first
+
+```shell 
+cd ./react-app
+npm run build
+cd ../
+```
+
+- Then remove your local `react-app/node_modules`, it's better to install dependencies fresh on the local ec2 instance
+
+- Then copy over contents from the project directory to the ec2 instance with:
 
 ```shell
 scp -i "event-calendar.pem" -r ./react-app admin@<react-app-public-dns>:~
@@ -75,7 +136,7 @@ scp -i "event-calendar.pem" -r ./react-app admin@<react-app-public-dns>:~
 ssh -i "event-calendar.pem" admin@<react-app-public-dns>
 ```
 
-- To actually provision and run the instance, enter:
+- To provision and run the instance, enter:
 
 ```shell
 cd ./react-app
@@ -97,7 +158,7 @@ scp -i "event-calendar.pem" -r ./cron-job admin@<cron-job-public-dns>:~
 ssh -i "event-calendar.pem" admin@<cron-job-public-dns>
 ```
 
-- To actually provision and run the instance, enter:
+- To provision and run the instance, enter:
 
 ```shell
 cd ./cron-job
@@ -128,13 +189,19 @@ cd ../
 rm -r sql-scripts/
 ```
 
-
 ### Teardown
-- To remove the Express lambda function, enter:
+
+- To remove the Express lambda function (from within the `express-server` directory), enter:
+
 ```shell
-serverless remvoe
+npm run remove
 ```
+
+- Note due to dependencies between the Terraform file and the Lambda function, the Lambda function needs to be torn down
+  *before* destroying any services defined by Terraform
+
 - To remove the other deployed services, enter:
+
 ```shell
 terraform destroy
 ```
@@ -143,5 +210,5 @@ terraform destroy
 
 - `express-server` contains a Node.js project for the backend express.js API
 - `react-app` contains a Node.js project for the frontend React app
-- `mysql-db` contains any configuration scripts of the MySQL RDS DB
+- `sql-scripts` contains any configuration scripts of the MySQL RDS DB
 - `cron-job` contains a micro project to run a cron-job within a container.
