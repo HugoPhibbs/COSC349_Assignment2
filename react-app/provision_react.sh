@@ -9,5 +9,4 @@ sudo apt-get install -y npm
 
 npm config set strict-ssl false
 npm install
-npm run build
-npm run prod-start
+npm run prod-start &
