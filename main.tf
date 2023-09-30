@@ -17,6 +17,7 @@ resource "aws_db_instance" "event-calendar-db" {
   password = var.db_password
   parameter_group_name = "default.mysql5.7"
 
+  skip_final_snapshot = true
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 }
 
@@ -86,10 +87,26 @@ resource "aws_instance" "react-app" {
   instance_type = "t3.micro" # Hopefully builds my react app in under 5 minutes (!!)
   key_name = "event-calendar"
 
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id, aws_security_group.react_ec2_public_access.id]
 
   tags = {
     Name = "react-app"
+  }
+}
+
+resource "aws_security_group" "react_ec2_public_access" {
+  description = "Allows inbound HTTP traffic to the express proxy server"
+
+  tags = {
+    Name = "react_ec2_public_access"
+  }
+
+  ingress {
+      description = "Access express proxy server from anywhere"
+      from_port = 3001
+      to_port = 3001
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -103,4 +120,8 @@ output "cron-job-public-dns" {
 
 output "db-endpoint" {
   value = aws_db_instance.event-calendar-db.endpoint
+}
+
+output "express-sg-id" {
+  value = aws_security_group.ec2_sg.id
 }
