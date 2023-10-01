@@ -136,7 +136,7 @@ const App: React.FC = () => {
     const currentPath = location.pathname;
 
     // Function to check if a link is active
-    const isLinkActive = (linkPath:f string) => {
+    const isLinkActive = (linkPath: string) => {
         return linkPath === "/"
             ? currentPath === linkPath
             : currentPath.startsWith(linkPath);

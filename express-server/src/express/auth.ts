@@ -155,7 +155,7 @@ authRouter.get(
         let results;
         try {
             [results] = await pool.query<User[]>(
-                `SELECT userId
+                `SELECT userId, isAdmin
                  FROM USER
                  WHERE email = ?`,
                 [req.auth.user]
@@ -176,7 +176,7 @@ authRouter.get(
         return res.status(200).json({
             // @ts-ignore
             // isAdmin: req.role === "admin",
-            isAdmin: true, // TODO remove this
+            isAdmin: results[0].isAdmin,
             userId: results[0].userId,
         });
     }
