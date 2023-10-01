@@ -136,7 +136,7 @@ const App: React.FC = () => {
     const currentPath = location.pathname;
 
     // Function to check if a link is active
-    const isLinkActive = (linkPath: string) => {
+    const isLinkActive = (linkPath:f string) => {
         return linkPath === "/"
             ? currentPath === linkPath
             : currentPath.startsWith(linkPath);
@@ -168,10 +168,10 @@ const App: React.FC = () => {
         <Wrapper>
             {/* Header */}
             <Header>
-                <Logo
-                    src={"/images/university-of-otago-logo.png"}
-                    alt="University of Otago Logo"
-                />
+                {/*<Logo*/}
+                {/*    src={"/images/university-of-otago-logo.png"}*/}
+                {/*    alt="University of Otago Logo"*/}
+                {/*/>*/}
                 <Title>Event Calendar</Title>
                 {isLoggedIn && (
                     // Display sign out button if user is logged in
