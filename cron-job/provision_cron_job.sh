@@ -10,4 +10,4 @@ sudo apt-get install -y npm
 npm config set strict-ssl false
 npm install
 npm install -g ts-node
-npm run start &
+npm run start
