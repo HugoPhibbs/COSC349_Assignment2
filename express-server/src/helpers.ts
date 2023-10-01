@@ -1,16 +1,19 @@
-import { User } from "./entities";
+import {User} from "./entities";
 
 export {};
 
-import mysql, { RowDataPacket } from "mysql2/promise";
+import mysql, {RowDataPacket} from "mysql2/promise";
 import dotenv from "dotenv";
+
 const createHttpError = require("http-errors");
 
 // Load env variables
 dotenv.config({path: __dirname + "/../.env"});
 
+const DB_HOST = (process.env.DB_HOST).replace(/:3306$/, ''); // Terraform attaches port to end, which needs to be removed
+
 const pool = mysql.createPool({
-    host: process.env.DB_HOST, // not totally sure why we don't use mysql!
+    host: DB_HOST, // not totally sure why we don't use mysql!
     user: "admin",
     password: "password",
     database: "event_calendar",
@@ -46,9 +49,10 @@ async function checkUserPermissions(userRole, userId, username) {
     // If the user is not an admin, check if the auth username matches the user being assigned
     if (userRole !== "admin") {
         const results = await pool.query<User[]>(
-            `SELECT * 
-                         FROM USER
-                         WHERE email = ? AND userId = ?`,
+            `SELECT *
+             FROM USER
+             WHERE email = ?
+               AND userId = ?`,
             [username, userId]
         );
         if ((results as RowDataPacket[])[0].length === 0) {

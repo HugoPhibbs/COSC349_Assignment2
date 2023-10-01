@@ -5,8 +5,10 @@ const dotenv = require('dotenv');
 // Load env variables
 dotenv.config();
 
+const DB_HOST = (process.env.DB_HOST).replace(/:3306$/, ''); // Terraform attaches port to end, which needs to be removed
+
 const pool = mysql.createPool({
-    host: process.env.DB_HOST, // not totally sure why we don't use mysql! TODO Change
+    host: DB_HOST, // not totally sure why we don't use mysql! TODO Change
     user: "admin",
     password: "password",
     database: "event_calendar",
