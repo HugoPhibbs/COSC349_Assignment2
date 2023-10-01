@@ -137,6 +137,7 @@ ssh -i "event-calendar.pem" admin@<cron-job-public-dns>
 
 - Now enter these commands, one after the other, make sure they all are successful before going onto the next. Enter the
   DB password when necessary, a popup should ask you if you want to uninstall MariaDB, enter yes.
+- The below commands set up the RDS DB, and insert dummy test data.
 
 ```shell
 cd ./sql-scripts
