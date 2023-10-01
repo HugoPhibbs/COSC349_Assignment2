@@ -16,7 +16,7 @@ provider:
     DB_HOST: ${env:DB_HOST}
   vpc:
     securityGroupIds:
-      - sg-02f68b564e4301b43
+      - sg-09d7d314857d8c051
     subnetIds:  # IDs of ap-southeast subnets
       - subnet-090fbbedb6683646f
       - subnet-089a15d385e74250c
