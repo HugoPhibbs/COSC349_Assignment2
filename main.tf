@@ -84,7 +84,7 @@ resource "aws_security_group" "ec2_sg" {
 
 resource "aws_instance" "react-app" {
   ami = "ami-00f3471feb1f3897e" // Default AMI from AWS
-  instance_type = "t3.micro" # Hopefully builds my react app in under 5 minutes (!!)
+  instance_type = "t2.micro" # Hopefully builds my react app in under 5 minutes (!!)
   key_name = "event-calendar"
 
   vpc_security_group_ids = [aws_security_group.ec2_sg.id, aws_security_group.react_ec2_public_access.id]
@@ -122,6 +122,6 @@ output "db-endpoint" {
   value = aws_db_instance.event-calendar-db.endpoint
 }
 
-output "express-sg-id" {
+output "lambda-express-sg-id" {
   value = aws_security_group.ec2_sg.id
 }
