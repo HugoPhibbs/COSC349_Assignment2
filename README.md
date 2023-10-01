@@ -120,7 +120,7 @@ API_HOST="XXXX"
 - First update the DB host name in the `sql-scripts/setup-db.sh`, using the value printed out by `terraform apply`. As so:
 ```shell
 # Change this on redeploys of the RDS DB
-export DB_HOST=XXXX # Use value of 'db-endpoint' from 'terraform apply'
+export DB_HOST=XXXX # Use value of 'db-endpoint' from 'terraform apply', remove the :PORT extension from the end
 ```
 
 - Now copy over the necessary sql scripts from your local machine to the cron-job ec2 with:
