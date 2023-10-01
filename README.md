@@ -90,7 +90,7 @@ provider:
 
 ### Deploying the Lambda Express app
 
-- Note: This must be done *after* deploying with Terraform
+- Note: This must be done *after* deploying with Terraform, since Terraform creates the security groups used by the Lambda function.
 
 - To deploy the Express API using the Serverless framework, enter:
 
@@ -99,7 +99,7 @@ cd express-server
 npm run install-deploy
 ```
 
-- Once you have deployed the Lambda, copy the API gateway address of the function to a new `.env` file
+- Once you have deployed the Lambda, copy the API gateway address of the function (should be printed out by Serverless) to a new `.env` file
   at `react-app/.env` like so:
 
 ```dotenv
@@ -110,7 +110,42 @@ API_HOST="XXXX"
 ### Provisioning
 
 - After deployment, you will need to provision the RDS DB and the EC2 instances.
-- The Terraform file prints out the DNS addresses of the React and Cron-Job EC2 instances, use these for the next steps
+- The previous `terrafform apply` prints out the DNS addresses of the React and Cron-Job EC2 instances, use these for the next steps.
+- Follow the next steps in the order that they appear.
+
+#### Provisioning the DB
+
+- To provision the DB, i.e. create the actual production database, you will need to first jump into the CRON job DB,
+  then provision it from there
+- First update the DB host name in the `sql-scripts/setup-db.sh`, using the value printed out by `terraform apply`. As so:
+```shell
+# Change this on redeploys of the RDS DB
+export DB_HOST=XXXX # Use value of 'db-endpoint' from 'terraform apply'
+```
+
+- Now copy over the necessary sql scripts from your local machine to the cron-job ec2 with:
+
+```shell
+ scp -i "event-calendar.pem" -r ./sql-scripts admin@<cron-job-public-dns>:~/
+```
+
+- Then SSH into the cron-job ec2 using:
+
+```shell
+ssh -i "event-calendar.pem" admin@<cron-job-public-dns>
+```
+
+- Now enter these commands, one after the other, make sure they all are successful before going onto the next. Enter the
+  DB password when necessary, a popup should ask you if you want to uninstall MariaDB, enter yes.
+
+```shell
+cd ./sql-scripts
+chmod +x setup-db.sh
+./setup-db.sh
+cd ../
+rm -r sql-scripts/
+```
+
 
 #### Provisioning the React instance:
 
@@ -165,30 +200,6 @@ cd ./cron-job
 chmod +x provision_cron_job.sh
 ./provision_cron_job
 ```
-
-#### Provisioning the DB
-
-- To provision the DB, i.e. create the actual production database, you will need to first jump into the CRON job DB,
-  then provision it from there
-
-- First copy over the necessary sql scripts from your local machine to the cron-job ec2 with:
-
-```shell
- scp -i "event-calendar.pem" -r ./sql-scripts admin@<cron-job-public-dns>:~/
-```
-
-- Then ssh into the cron-job ec2 using the same command as above
-- Now enter these commands, one after the other, make sure they all are successful before going onto the next. Enter the
-  DB password when necessary, a popup should ask you if you want to uninstall MariaDB, click yes to this.
-
-```shell
-cd ./sql-scripts
-chmod +x setup-db.sh
-./setup-db.sh
-cd ../
-rm -r sql-scripts/
-```
-
 ### Teardown
 
 - To remove the Express lambda function (from within the `express-server` directory), enter:
